@@ -7,7 +7,7 @@ const SLIDER_CONFIG = {
 };
 
 // Video data with new YouTube videos
-const VIDEOS = [
+/*const VIDEOS = [
     {
         youtubeId: '1VeNdigkEw4',
         title: 'Wedding Film 1',
@@ -50,7 +50,7 @@ const VIDEOS = [
         category: 'wedding',
         thumbnail: 'https://img.youtube.com/vi/kJXFB5Wo0bI/maxresdefault.jpg'
     }
-];
+];*/
 
 // Video data with new YouTube videos
 const VIDEOS = [

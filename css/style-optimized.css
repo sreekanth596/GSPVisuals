@@ -316,9 +316,15 @@ p {
     padding: 6rem var(--spacing-xl) 4rem;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%),
-                url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+    /* Layered background */
+    background-image: 
+        linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 100%),
+        url('images/background/logo.png');
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    background-size: cover, cover;
 }
+
 
 .hero-content {
     max-width: 56rem;
@@ -589,6 +595,13 @@ background-image: url("images/background/logo.png");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 12px 8px;
+}
+
+/* Fix for Firefox */
+@-moz-document url-prefix() {
+    .sort-options select {
+        background-image: none;
+    }
 }
 
 .view-options {

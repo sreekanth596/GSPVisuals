@@ -26,13 +26,13 @@ const CAROUSEL_CONFIG = {
             category: 'wedding'
         },
         {
-            id: 'dQw4w9WgXcQ',
+            id: 'nDfzUQOpZJU',
             title: 'Portrait Photography',
             description: 'Professional portrait photography techniques',
             category: 'photography'
         },
         {
-            id: '9bZkp7q19f0',
+            id: 'kJXFB5Wo0bI',
             title: 'Event Coverage',
             description: 'Capturing special events and moments',
             category: 'events'
