@@ -1,215 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - Visual Stories by GSP</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style-optimized.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visual Stories by GSP – Gallery</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #0f0f0f;
+      color: #f2f2f2;
+    }
+
+    /* NAVBAR */
+    nav.navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.8rem;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .logo-sub {
+      color: #e74c3c;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+      margin: 0;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #ccc;
+      transition: 0.3s;
+      font-weight: 400;
+    }
+    .nav-links a:hover,
+    .nav-links .active {
+      color: #e74c3c;
+    }
+
+    /* HEADER */
+    .gallery-header {
+      text-align: center;
+      padding: 70px 20px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .gallery-header h1 {
+      font-size: 3rem;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+    .gallery-header p {
+      color: #bbb;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* FILTER BUTTONS */
+    .gallery-filters {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 40px 0;
+    }
+    .filter-btn {
+      padding: 10px 22px;
+      border: 1px solid #e74c3c;
+      background: transparent;
+      color: #e74c3c;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+
+    /* GALLERY GRID */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 20px 40px 60px;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1a1a1a;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-6px);
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+    .gallery-caption {
+      padding: 18px;
+    }
+    .gallery-caption h3 {
+      color: #fff;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+    }
+    .gallery-caption p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+    }
+    .gallery-category {
+      font-size: 0.8rem;
+      background: #2b2b2b;
+      color: #e74c3c;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80vh;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 25px;
+      right: 40px;
+      color: #fff;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .lightbox-close:hover {
+      color: #e74c3c;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .nav-btn:hover {
+      background: #e74c3c;
+    }
+    .prev {
+      left: 40px;
+    }
+    .next {
+      right: 40px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .gallery-header h1 {
+        font-size: 2.2rem;
+      }
+      .gallery-item img {
+        height: 200px;
+      }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid {
+        padding: 10px 20px;
+      }
+      .gallery-header h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="logo">
-            <span class="logo-main">GSP</span><span class="logo-sub">Visuals</span>
-        </a>
-        
-        <button class="menu-toggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        
-        <ul class="nav-links">
-            <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
-            <li><a href="index.html#about" class="nav-link">About</a></li>
-            <li><a href="index.html#services" class="nav-link">Services</a></li>
-            <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-        </ul>
-    </nav>
+  <nav class="navbar">
+    <a href="index.html" class="logo">GSP<span class="logo-sub">Visuals</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - Phoyography</title>
-    <link rel="stylesheet" href="css/style-optimized.css">
-</head>
-<body>
-   
+  <header class="gallery-header">
+    <h1>Our Photo Gallery</h1>
+    <p>Immerse yourself in moments frozen in time. From weddings to portraits, every frame captures emotion, elegance, and artistry.</p>
 
-    
-
-    <script src="js/gallery.js"></script>
-</body>
-</html>
-            
-                
-              
-
-            
-
-           
-
-           
-          
-
-    <!-- Lightbox Modal -->
-    <div id="lightbox" class="lightbox">
-        <span class="close-lightbox">&times;</span>
-        <span class="nav-arrow prev-arrow">&lsaquo;</span>
-        <div class="lightbox-content">
-            <img src="" alt="" id="lightbox-img">
-            <div class="lightbox-caption">
-                <h3 id="lightbox-title"></h3>
-                <p id="lightbox-desc"></p>
-                <div class="lightbox-meta">
-                    <span class="category" id="lightbox-category"></span>
-                    <span class="date" id="lightbox-date"></span>
-                </div>
-            </div>
-        </div>
-        <span class="nav-arrow next-arrow">&rsaquo;</span>
-        <div class="lightbox-loader">
-            <div class="spinner"></div>
-        </div>
+    <div class="gallery-filters">
+      <button class="filter-btn active" data-category="all">All</button>
+      <button class="filter-btn" data-category="wedding">Wedding</button>
+      <button class="filter-btn" data-category="portrait">Portrait</button>
+      <button class="filter-btn" data-category="event">Event</button>
+      <button class="filter-btn" data-category="maternity">Maternity</button>
     </div>
+  </header>
 
-    <!-- Gallery Section -->
-    <section class="gallery-section">
-        <div class="gallery-container">
-            <!-- Section Header -->
-            <div class="section-header">
-                <h2>Our Gallery</h2>
-                <p class="section-subtitle">Capturing life's most beautiful moments</p>
-            </div>
+  <main>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </main>
 
-            <!-- Category Tabs -->
-            <div class="category-tabs">
-                <button class="category-btn active" data-category="all">All</button>
-                <button class="category-btn" data-category="wedding">Wedding</button>
-                <button class="category-btn" data-category="portrait">Portraits</button>
-                <button class="category-btn" data-category="event">Events</button>
-            </div>
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <button class="lightbox-close">&times;</button>
+    <button class="nav-btn prev">❮</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="nav-btn next">❯</button>
+  </div>
 
-            <!-- Gallery Grid -->
-            <div class="gallery-grid">
-                <div class="gallery-item" data-category="wedding">
-                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=774&q=80" alt="Bride Portrait" loading="lazy">
-                    <div class="gallery-overlay">
-                        <h4>Bride Portrait</h4>
-                        <p>Elegant bridal moment</p>
-                    </div>
-                </div>
-            <div class="gallery-item" data-category="wedding">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Wedding Ceremony" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Wedding Ceremony</h4>
-                    <p>Sacred vows in traditional attire</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="wedding">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Wedding Dance" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Wedding Dance</h4>
-                    <p>First dance of the newlyweds</p>
-                </div>
-            </div>
+  <script>
+    const galleryData = [
+      { src: "images/gallery/202 18X24.jpg", title: "Portrait Session", category: "portrait" },
+      { src: "images/gallery/IMG_4381 5X7.jpg", title: "5x7 Portrait", category: "portrait" },
+      { src: "images/gallery/_DPU8990 18X24.jpg", title: "18x24 Portrait", category: "portrait" },
+      { src: "https://source.unsplash.com/random/600x400?wedding", title: "Wedding Story", category: "wedding" },
+      { src: "https://source.unsplash.com/random/600x400?event", title: "Corporate Event", category: "event" },
+      { src: "https://source.unsplash.com/random/600x400?maternity", title: "Maternity Bliss", category: "maternity" }
+    ];
 
-            <!-- Portrait Category -->
-            <div class="gallery-item" data-category="portrait">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Portrait of Bride" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Portrait of Bride</h4>
-                    <p>Elegant bridal portrait</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="portrait">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Family Portrait" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Family Portrait</h4>
-                    <p>Generational family photograph</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="portrait">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Couple Portrait" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Couple Portrait</h4>
-                    <p>Intimate couple moment</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="portrait">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Senior Portrait" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Senior Portrait</h4>
-                    <p>Timeless senior photograph</p>
-                </div>
-            </div>
+    const grid = document.getElementById("galleryGrid");
+    const filterBtns = document.querySelectorAll(".filter-btn");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector(".next");
+    const closeBtn = document.querySelector(".lightbox-close");
+    let filtered = [...galleryData];
+    let current = 0;
 
-            <!-- All Category -->
-            <div class="gallery-item" data-category="all">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Cultural Event" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Cultural Event</h4>
-                    <p>Traditional cultural celebration</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="all">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Nature Photography" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Nature Photography</h4>
-                    <p>Scenic landscape capture</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="all">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Street Photography" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Street Photography</h4>
-                    <p>Urban life moments</p>
-                </div>
-            </div>
-            <div class="gallery-item" data-category="all">
-                <img src="https://images.unsplash.com/photo-1523438885200-e0ba1be5e151?ixlib=rb-4.0.3&auto=format&fit=crop&w=774&q=80" alt="Event Photography" loading="lazy">
-                <div class="gallery-overlay">
-                    <h4>Event Photography</h4>
-                    <p>Corporate event documentation</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    function renderGallery() {
+      grid.innerHTML = "";
+      filtered.forEach((item, i) => {
+        const div = document.createElement("div");
+        div.className = "gallery-item";
+        div.innerHTML = `
+          <img src="${item.src}" alt="${item.title}">
+          <div class="gallery-caption">
+            <h3>${item.title}</h3>
+            <span class="gallery-category">${item.category}</span>
+          </div>`;
+        div.addEventListener("click", () => openLightbox(i));
+        grid.appendChild(div);
+      });
+    }
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <p>Capturing life's precious moments with creativity and passion.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="index.html#services">Services</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact Us</h3>
-                <p>Email: info@gspvisuals.com</p>
-                <p>Phone: +1 234 567 8900</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2023 GSP Visuals. All Rights Reserved.</p>
-        </div>
-    </footer>
+    function openLightbox(i) {
+      current = i;
+      lightboxImg.src = filtered[current].src;
+      lightbox.classList.add("active");
+    }
 
-    <script src="js/script.js"></script>
-    <script src="js/gallery.js"></script>
+    function closeLightbox() {
+      lightbox.classList.remove("active");
+    }
+
+    function nextImage() {
+      current = (current + 1) % filtered.length;
+      lightboxImg.src = filtered[current].src;
+    }
+
+    function prevImage() {
+      current = (current - 1 + filtered.length) % filtered.length;
+      lightboxImg.src = filtered[current].src;
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const cat = btn.dataset.category;
+        filtered = cat === "all" ? [...galleryData] : galleryData.filter(i => i.category === cat);
+        renderGallery();
+      });
+    });
+
+    nextBtn.addEventListener("click", nextImage);
+    prevBtn.addEventListener("click", prevImage);
+    closeBtn.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
+
+    renderGallery();
+  </script>
 </body>
 </html>

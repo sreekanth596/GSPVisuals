@@ -1,3 +1,7 @@
+// Load environment variables and email config
+require('dotenv').config({ path: '../.env' });
+const { sendContactForm } = require('./utils/emailConfig');
+
 // Contact Form Handling
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contactForm');
@@ -9,35 +13,41 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Get form data
         const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
-            event: document.getElementById('event').value,
-            message: document.getElementById('message').value
+            name: document.getElementById('name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            event: document.getElementById('event').value.trim(),
+            message: document.getElementById('message').value.trim()
         };
 
+        // Basic validation
+        if (!formData.name || !formData.email || !formData.message) {
+            showNotification('Please fill in all required fields.', 'error');
+            return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            showNotification('Please enter a valid email address.', 'error');
+            return;
+        }
+
         // Show loading state
-        const submitBtn = contactForm.querySelector('.submit-btn');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         submitBtn.disabled = true;
 
         try {
-            // Using EmailJS to send the email
-            // You'll need to sign up at https://www.emailjs.com/ to get your service ID and template ID
-            await emailjs.send(
-                'service_bwq5g1b', // Replace with your EmailJS service ID
-                'template_ixv3leb', // Replace with your EmailJS template ID
-                {
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    phone: formData.phone,
-                    event_type: formData.event,
-                    message: formData.message,
-                    to_email: 'visualstoriesbygsp@gmail.com' // Replace with your email
-                },
-                'B4O_bUIkmxxOA7720' // Replace with your EmailJS public key
-            );
+            // Send email using our email configuration
+            await sendContactForm({
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                event: formData.event,
+                message: formData.message
+            });
 
             // Show success message
             showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');

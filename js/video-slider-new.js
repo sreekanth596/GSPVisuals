@@ -1,53 +1,190 @@
 // Video Slider Configuration
-var SLIDER_CONFIG = {
+const SLIDER_CONFIG = {
     autoSlide: true,
     slideDuration: 5000,
     transitionSpeed: 600,
     touchSensitivity: 50
 };
 
+// Video data with new YouTube videos
+const VIDEOS = [
+    {
+        youtubeId: '1VeNdigkEw4',
+        title: 'Wedding Film 1',
+        description: 'Beautiful wedding moments captured in 4K',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/1VeNdigkEw4/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'yzQmYT48ykI',
+        title: 'Wedding Film 2',
+        description: 'Emotional wedding ceremony highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/yzQmYT48ykI/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'qOQ36uC0DJk',
+        title: 'Wedding Film 3',
+        description: 'Grand reception and celebrations',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/qOQ36uC0DJk/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'Qyf6c7LLo9k',
+        title: 'Wedding Film 4',
+        description: 'Candid wedding moments',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/Qyf6c7LLo9k/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'nDfzUQOpZJU',
+        title: 'Wedding Film 5',
+        description: 'Traditional wedding highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/nDfzUQOpZJU/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'kJXFB5Wo0bI',
+        title: 'Wedding Film 6',
+        description: 'Destination wedding highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/kJXFB5Wo0bI/maxresdefault.jpg'
+    }
+];
+
+// Video data with new YouTube videos
+const VIDEOS = [
+    {
+        youtubeId: '1VeNdigkEw4',
+        title: 'Wedding Film 1',
+        description: 'Beautiful wedding moments captured in 4K',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/1VeNdigkEw4/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'yzQmYT48ykI',
+        title: 'Wedding Film 2',
+        description: 'Emotional wedding ceremony highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/yzQmYT48ykI/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'qOQ36uC0DJk',
+        title: 'Wedding Film 3',
+        description: 'Grand reception and celebrations',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/qOQ36uC0DJk/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'Qyf6c7LLo9k',
+        title: 'Wedding Film 4',
+        description: 'Candid wedding moments',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/Qyf6c7LLo9k/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'nDfzUQOpZJU',
+        title: 'Wedding Film 5',
+        description: 'Traditional wedding highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/nDfzUQOpZJU/maxresdefault.jpg'
+    },
+    {
+        youtubeId: 'kJXFB5Wo0bI',
+        title: 'Wedding Film 6',
+        description: 'Destination wedding highlights',
+        category: 'wedding',
+        thumbnail: 'https://img.youtube.com/vi/kJXFB5Wo0bI/maxresdefault.jpg'
+    }
+];
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    var slider = document.querySelector('.video-slider');
-    var sliderContainer = document.querySelector('.video-slider-container');
-    var dotsContainer = document.querySelector('.slider-dots');
-    var slides = document.querySelectorAll('.video-slide');
-    var dots = [];
-    var currentIndex = 0;
-    var autoSlideInterval;
+    const slider = document.querySelector('.video-slider');
+    const dotsContainer = document.querySelector('.slider-dots');
+    const prevBtn = document.querySelector('.slider-nav.prev');
+    const nextBtn = document.querySelector('.slider-nav.next');
     
-    if (!slider || !sliderContainer || !dotsContainer || !slides.length) return;
+    if (!slider || !dotsContainer) return;
     
-    // Initialize dots
-    function initDots() {
+    // Slider variables
+    let currentSlide = 0;
+    let isAnimating = false;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let autoSlideInterval;
+    
+    // Initialize the slider
+    initSlider();
+    
+    // Set up event listeners
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+    
+    // Touch events for mobile
+    slider.addEventListener('touchstart', handleTouchStart, { passive: true });
+    slider.addEventListener('touchmove', handleTouchMove, { passive: true });
+    slider.addEventListener('touchend', handleTouchEnd, { passive: true });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Start auto-slide if enabled
+    if (SLIDER_CONFIG.autoSlide) {
+        startAutoSlide();
+    }
+    
+    // Initialize the slider
+    function initSlider() {
+        // Clear existing content
+        slider.innerHTML = '';
         dotsContainer.innerHTML = '';
-        dots = [];
         
-        for (var i = 0; i < slides.length; i++) {
-            var dot = document.createElement('div');
-            dot.className = 'dot' + (i === 0 ? ' active' : '');
-            dot.setAttribute('data-index', i);
-            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-            dot.addEventListener('click', function() {
-                goToSlide(parseInt(this.getAttribute('data-index'), 10));
-            });
-            dots.push(dot);
+        // Create slides and dots
+        VIDEOS.forEach((video, index) => {
+            // Create slide
+            const slide = document.createElement('div');
+            slide.className = 'video-slide' + (index === 0 ? ' active' : '');
+            slide.setAttribute('data-index', index);
+            
+            // Create video container with thumbnail
+            slide.innerHTML = `
+                <div class="video-container">
+                    <a href="https://www.youtube.com/watch?v=${video.youtubeId}" target="_blank" class="video-thumbnail">
+                        <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="video-info">
+                            <h3>${video.title}</h3>
+                            <p>${video.description}</p>
+                        </div>
+                    </a>
+                </div>
+            `;
+            
+            slider.appendChild(slide);
+            
+            // Create dot
+            const dot = document.createElement('button');
+            dot.className = 'slider-dot' + (index === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+            dot.addEventListener('click', () => goToSlide(index));
             dotsContainer.appendChild(dot);
-        }
+        });
+        
+        // Initialize first slide
+        updateSlider();
     }
     
     // Go to specific slide
     function goToSlide(index) {
-        if (index < 0) index = slides.length - 1;
-        if (index >= slides.length) index = 0;
+        if (index < 0) index = VIDEOS.length - 1;
+        if (index >= VIDEOS.length) index = 0;
         
-        // Update active slide
-        for (var i = 0; i < slides.length; i++) {
-            slides[i].classList.remove('active');
-            dots[i].classList.remove('active');
-        }
-        
-        slides[index].classList.add('active');
+        currentSlide = index;
+        updateSlider();
+    }
         dots[index].classList.add('active');
         currentIndex = index;
         

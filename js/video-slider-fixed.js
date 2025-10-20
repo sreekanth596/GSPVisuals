@@ -1,9 +1,13 @@
+// Load environment variables from .env file
+require('dotenv').config({ path: '../.env' });
+
 // Video Slider Configuration
 const SLIDER_CONFIG = {
-    autoSlide: true,
-    slideDuration: 5000,
-    transitionSpeed: 600,
-    touchSensitivity: 50
+    autoSlide: process.env.SLIDER_AUTO_SLIDE === 'true' || true,
+    slideDuration: parseInt(process.env.SLIDER_DURATION) || 5000,
+    transitionSpeed: parseInt(process.env.SLIDER_TRANSITION_SPEED) || 600,
+    touchSensitivity: parseInt(process.env.SLIDER_TOUCH_SENSITIVITY) || 50,
+    youtubeApiKey: process.env.YOUTUBE_API_KEY || ''
 };
 
 // Video Slider Functionality
@@ -22,39 +26,60 @@ document.addEventListener('DOMContentLoaded', function() {
     var touchEndX = 0;
     var autoSlideInterval;
     
-    // Video data - Updated with more YouTube videos
-    var videos = [
-        // Wedding Highlights
-        {
-            youtubeId: '73CByp9O6kc',
-            title: 'Pre-Wedding',
-            description: 'Romantic pre-wedding moments in stunning locations',
+    // Video data - Load from environment variable or use default
+    // Format: VIDEO_DATA=[{youtubeId:'ID1',title:'Title 1',description:'Desc 1',category:'wedding'},{...}]
+    let videos = [];
+    
+    try {
+        if (process.env.VIDEO_DATA) {
+            videos = JSON.parse(process.env.VIDEO_DATA);
+        } else {
+            // Fallback to default videos if none provided in .env
+            videos = [
+                // Wedding Films
+                {
+                    youtubeId: '1VeNdigkEw4',
+                    title: 'Wedding Film 1',
+                    description: 'Beautiful wedding moments captured in 4K',
+                    category: 'wedding',
+                    thumbnail: 'https://img.youtube.com/vi/1VeNdigkEw4/maxresdefault.jpg'
+                },
+                {
+                    youtubeId: 'yzQmYT48ykI',
+                    title: 'Wedding Film 2',
+                    description: 'Emotional wedding ceremony highlights',
+                    category: 'wedding',
+                    thumbnail: 'https://img.youtube.com/vi/yzQmYT48ykI/maxresdefault.jpg'
+                },
+                {
+                    youtubeId: 'qOQ36uC0DJk',
+                    title: 'Wedding Film 3',
+                    description: 'Grand reception and celebrations',
+                    category: 'wedding',
+                    thumbnail: 'https://img.youtube.com/vi/qOQ36uC0DJk/maxresdefault.jpg'
+                },
+                {
+                    youtubeId: 'Qyf6c7LLo9k',
+            title: 'Wedding Film 4',
+            description: 'Candid wedding moments',
             category: 'wedding',
-            thumbnail: 'https://img.youtube.com/vi/73CByp9O6kc/maxresdefault.jpg'
+            thumbnail: 'https://img.youtube.com/vi/Qyf6c7LLo9k/maxresdefault.jpg'
         },
         {
-            youtubeId: '9bZkp7q19f0',
-            title: 'Wedding Highlights',
-            description: 'Full wedding day highlights and special moments',
+            youtubeId: 'nDfzUQOpZJU',
+            title: 'Wedding Film 5',
+            description: 'Traditional wedding highlights',
             category: 'wedding',
-            thumbnail: 'https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg'
+            thumbnail: 'https://img.youtube.com/vi/nDfzUQOpZJU/maxresdefault.jpg'
         },
         {
-            youtubeId: 'JGwWNGJdvx8',
-            title: 'Reception',
-            description: 'Evening reception celebrations and first dance',
+            youtubeId: 'kJXFB5Wo0bI',
+            title: 'Wedding Film 6',
+            description: 'Destination wedding highlights',
             category: 'wedding',
-            thumbnail: 'https://img.youtube.com/vi/JGwWNGJdvx8/maxresdefault.jpg'
-        },
-        {
-            youtubeId: 'OPf0YbXqDm0',
-            title: 'Bridal Portraits',
-            description: 'Elegant bridal portraits and details',
-            category: 'portrait',
-            thumbnail: 'https://img.youtube.com/vi/OPf0YbXqDm0/maxresdefault.jpg'
-        },
-        
-        // Photography Techniques
+            thumbnail: 'https://img.youtube.com/vi/kJXFB5Wo0bI/maxresdefault.jpg'
+        }
+    ];
         {
             youtubeId: 'dQw4w9WgXcQ',
             title: 'Portrait Photography Tips',

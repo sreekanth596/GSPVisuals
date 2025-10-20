@@ -9,6 +9,125 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style-optimized.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Founder Image Styles */
+        .team-section {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
+        }
+        
+        .team-member {
+            text-align: center;
+            width: 100%;
+        }
+        
+        .member-image {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid #2c3e50;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            transition: transform 0.3s ease;
+        }
+        
+        .member-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .member-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 62, 80, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 50%;
+        }
+        
+        .member-image:hover .member-overlay {
+            opacity: 1;
+        }
+        
+        .member-social {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-3px);
+            color: #fff;
+        }
+        
+        .member-info {
+            margin-top: 20px;
+        }
+        
+        .member-info h4 {
+            font-size: 1.7rem;
+            color: #eceff3;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .member-role {
+            display: block;
+            color: #1b08ed;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .member-bio {
+            color: #0677b4;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .member-image {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .member-info h4 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -45,7 +164,7 @@
         </div>
         
 
-        <!-- Video Gallery -->
+        <!-- YouTube Video Carousel -->
         <div class="video-gallery-container">
             <div class="section-header">
                 <h2>Video Highlights</h2>
@@ -53,19 +172,8 @@
                 <p class="section-subtitle">Watch our latest work in motion</p>
             </div>
             
-            <div class="video-slider-container">
-                <div class="video-slider">
-                    <!-- Video items will be added by JavaScript -->
-                </div>
-                <button class="slider-nav prev" aria-label="Previous video">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="slider-nav next" aria-label="Next video">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-                <div class="slider-dots">
-                    <!-- Dots will be added by JavaScript -->
-                </div>
+            <div id="video-carousel">
+                <!-- Carousel will be added by JavaScript -->
             </div>
         </div>
     </section>
@@ -80,41 +188,26 @@
         <div class="about-container">
             <!-- Team Section -->
             <div class="team-section">
-                <h3>Meet Our Team</h3>
+                <h3>Meet Our Founder</h3>
                 <div class="team-grid">
+                    <!-- Founder -->
                     <div class="team-member">
                         <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGV1cm9wZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Sreekar P" loading="lazy">
+                            <img src="images/team/founder.jpg" alt="Gowri Shankar Prasad - Founder" loading="lazy" onerror="this.src='images/team/placeholder.jpg'">
                             <div class="member-overlay">
                                 <div class="member-social">
-                                    <a href="https://www.instagram.com/filmmaker_gsp?igsh=c3hsZm1teXNvd2Z4" class="social-link"><i class="fab fa-instagram"></i></a>
-                                    <a href="https://wa.me/916302781067" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="https://www.instagram.com/filmmaker_gsp?igsh=c3hsZm1teXNvd2Z4" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                    <a href="https://wa.me/916302781067" class="social-link" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                                 </div>
                             </div>
                         </div>
                         <div class="member-info">
                             <h4>Gowri Shankar Prasad</h4>
                             <span class="member-role">Founder & Lead Photographer</span>
-                            <p class="member-bio">With over a decade of experience, Gowri Shankar Prasad brings creativity and passion to every shoot.</p>
+                            <p class="member-bio">With over a decade of experience, Gowri Shankar Prasad brings creativity and passion to every shoot, specializing in capturing the most precious moments of your special day.</p>
                         </div>
                     </div>
-                    
-                    <div class="team-member">
-                        <div class="member-image">
-                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGV1cm9wZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=1171&q=80" alt="Team Member" loading="lazy">
-                            <div class="member-overlay">
-                                <div class="member-social">
-                                    <a href="https://www.instagram.com/__mario__v_s__?igsh=czAxOWUydHU2c2My" class="social-link"><i class="fab fa-instagram"></i></a>
-                                    <a href="https://wa.me/916302781067" class="social-link"><i class="fab fa-whatsapp"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-info">
-                            <h4>Varun Sai</h4>
-                            <span class="member-role">Managing Director</span>
-                            <p class="member-bio">Specializing in creative direction, the Managing Director leads the photography team to capture timeless moments with excellence and vision.</p>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -754,7 +847,7 @@
     <!-- Main Scripts -->
     <script src="js/script.js"></script>
     <script src="js/gallery.js"></script>
-    <script src="js/video-slider-fixed.js" defer></script>
+    <script src="js/video-slider-new.js" defer></script>
     
     <!-- EmailJS Library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -768,5 +861,8 @@
     
     <!-- Contact Form Script -->
     <script src="js/contact-form.js" defer></script>
+    
+    <!-- YouTube Video Carousel -->
+    <script src="js/youtube-carousel.js" defer></script>
 </body>
 </html>
